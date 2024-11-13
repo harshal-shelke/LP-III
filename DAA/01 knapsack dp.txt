@@ -1,0 +1,28 @@
+def knapSack(W, wt, val, n, memo):
+    if memo[n][W] != -1:
+        return memo[n][W]
+
+    if n == 0 or W == 0:
+        return 0
+
+    if wt[n - 1] > W:
+        memo[n][W] = knapSack(W, wt, val, n - 1, memo)
+        return memo[n][W]
+
+    exclude = knapSack(W, wt, val, n - 1, memo)
+    include = val[n - 1] + knapSack(W - wt[n - 1], wt, val, n - 1, memo)
+
+    memo[n][W] = max(exclude, include)
+    return memo[n][W]
+
+def knapSackWithMemoization(W, wt, val, n):
+    memo = [[-1 for _ in range(W + 1)] for _ in range(n + 1)]
+    return knapSack(W, wt, val, n, memo)
+
+val = [50, 100, 150, 200]
+wt = [8, 16, 32, 40]
+W = 64
+n = len(val)
+
+maxValue = knapSackWithMemoization(W, wt, val, n)
+print("Maximum value in Knapsack =", maxValue)
